@@ -7,4 +7,4 @@ module.exports = async ({ expressApp }) => {
 };
 
 // console.log('init');
-// load.loadQuadras();
+load.loadFromBackup();

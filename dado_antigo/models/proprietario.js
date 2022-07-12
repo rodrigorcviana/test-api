@@ -3,15 +3,16 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('proprietario', {
     id: {
       type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true
     },
     nome: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.STRING(100),
       allowNull: true
     },
     cpf_cnpj: {
-      type: DataTypes.STRING(15),
+      type: DataTypes.STRING(50),
       allowNull: true
     },
     tipo: {
@@ -19,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     endereco: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(300),
       allowNull: true
     }
   }, {

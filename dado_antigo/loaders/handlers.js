@@ -2,7 +2,7 @@ exports.logradouro = (data) => {
     const group = data.map((d) => {
         const element = d.map((e) => {
             if (e.hasOwnProperty('logradouro') && e.hasOwnProperty('tipo_logradouro')) {
-                e.logradouro = e.tipo_logradouro + e.logradouro;
+                e.logradouro = e.tipo_logradouro + ' ' + e.logradouro;
                 delete e.tipo_logradouro;
             }
 
@@ -18,11 +18,10 @@ exports.logradouro = (data) => {
 exports.endereco = (data) => {
     const group = data.map((d) => {
         const element = d.map((e) => {
-            numero;bairro;complemento;cidade;estado;cep
             if (e.hasOwnProperty('logradouro') && e.hasOwnProperty('numero') && e.hasOwnProperty('bairro')
             && e.hasOwnProperty('complemento') && e.hasOwnProperty('cidade') && e.hasOwnProperty('estado')
             && e.hasOwnProperty('cep')) {
-                e.endereco = `${e.logradouro}, ${e.numero}, ${e.bairro}, ${e.complemnto} - ${e.cidade}-${e.estado}, ${e.cep}`;
+                e.endereco = `${e.logradouro}, ${e.numero}, ${e.bairro}, ${e.complemento} - ${e.cidade}-${e.estado}, ${e.cep}`;
                 delete e.logradouro;
                 delete e.numero;
                 delete e.bairro;
@@ -166,14 +165,42 @@ exports.areaConstruidaTotal = (data) => {
     const groups = data.map((d) => {
         const element = d.map((e) => {
             if (e.hasOwnProperty('area_construida_unid') && e.hasOwnProperty('area_edicula')) {
-                e.area_construida_total = e.area_construida_unid + e.area_edicula;
+                e.area_construida_total = parseFloat(e.area_construida_unid) + parseFloat(e.area_edicula);
                 delete e.area_edicula;
             }
 
             return e;
         });
+
+        return element;
     });
+
+    return groups;
 };
+
+exports.topografia = (value) => {
+    /* 
+        "Plano",
+        "Aclive",
+        "Declive",
+        "Irregular",
+        "Difícil Aproveitamento",
+        "Difícil",
+        "Aproveitamento",
+    */
+
+    return 'Plano';
+}
+
+exports.pedologia = (value) => {
+    /*
+        "NÃO ATRIBUÍDO",
+        "FIRME",
+        "INUNDÁVEL"
+    */
+
+    return 'NÃO ATRIBUÍDO';
+}
 
 exports.utilizacao = (value) => {
     /*
@@ -194,7 +221,7 @@ exports.utilizacao = (value) => {
     || value === 'Hotelaria' || value === 'Prestação de Serviços') return 'Serviços';
     if (value === 'Serv. Público') return 'Pública';
     if (value === 'Ind. Agropecuária') return 'Agropecuária';
-    if (value === 'Terreno Vago') return 'Terreno sem uso';
+    if (value === 'Terreno Vago') return 'Terreno sem Uso';
     
     return 'Outros';
 };
@@ -222,6 +249,107 @@ exports.tipo = (value) => {
     return 'Outros';
 };
 
-exports.alinhamento = () => {
+exports.alinhamento = (value) => {
+    /* 
+        Frente Alinhada,
+        Frente Recuada,
+        Fundos
+    */
+   if (value === 'FRENTE') return 'Frente Alinhada';
+   if (value === 'FUNDOS') return 'Fundos';
 
+   return 'Frente Recuada';
 };
+
+exports.posicao = (value) => {
+    /*
+        Isolada,
+        Geminada,
+        Conjugada,
+        Cond. Vertical,
+        Cond. Horizontal,
+    */
+   if (value === 'CONJUGADA') return 'Conjugada';
+   if (value === 'GEMINADA') return 'Geminada';
+   if (value === 'ISOLADA') return 'Isolada';
+
+   return 'Geminada';
+};
+
+exports.cobertura = (value) => {
+    /*
+        Fibrociamento,
+        Cerâmica,
+        Laje,
+        Metálica,
+        Palha/Zinco,
+        Especial
+    */
+   
+    if (value === 'ESPECIAL') return 'Especial';
+    if (value === 'LAJE') return 'Laje';
+    if (value === 'TELHA BARR') return 'Cerâmica';
+    if (value === 'TELHA FIBR') return 'Fibrocimento';
+    if (value === 'ZINCO/PALH') return 'Palha/Zinco';
+
+    return 'Metálica';
+};
+
+exports.sanitaria = (value) => {
+    /*
+        NÃO ATRIBUÍDO,
+        INTERNA COMPLETA,
+        INTERNA SIMPLES,
+        MAIS DE UMA INTERNA,
+    */
+
+    if (value === '+1 INTERNA') return 'MAIS DE UMA INTERNA';
+    if (value === 'EXTERNA') return 'NÃO ATRIBUÍDO';
+    if (value === 'INEXISTENTE') return 'NÃO ATRIBUÍDO';
+    if (value === 'INT.COMPL') return 'INTERNA COMPLETA';
+    if (value === 'INT.SIMPL') return 'INTERNA SIMPLES';
+
+    return 'NÃO ATRIBUÍDO';
+}
+
+exports.eletrica = (value) => {
+    /*
+        NÃO ATRIBUÍDO,
+        EMBUTIDA,
+        APARENTE,
+        SEMI-EMBUTIDA,
+    */
+
+    if (value === 'APARENTE') return 'APARENTE';
+    if (value === 'EMBUTIDA') return 'EMBUTIDA';
+    if (value === 'INEXISTENTE') return 'NÃO ATRIBUÍDO';
+
+    return 'NÃO ATRIBUÍDO';
+};
+
+exports.estrutura = (value) => {
+    // "Madeira","Alvenaria","Concreto","Metálico"
+    if (value === 'ALVENARIA') return 'Madeira';
+    if (value === 'CONCRETO') return 'Alvenaria';
+    if (value === 'METALICA') return 'Concreto';
+    if (value === 'MADEIRA') return 'Metálico';
+
+    return 'Alvenaria';
+}
+
+exports.paredes = (value) => {
+    // "Nenhuma","Madeira","Taipa","Alvenaria","Concreto","Especial"
+
+    if (value === 'ALVENARIA') return 'Alvenaria';
+    if (value === 'TAIPA') return 'Taipa';
+    if (value === 'CHOÇA/BARRACO') return 'Nenhuma';
+    if (value === 'MADEIRA') return 'Madeira'
+    
+    return 'Nenhuma';
+}
+
+exports.conservacao = (value) => {
+    // "Má","Regular","Boa","Ótimo/Novo"
+
+    return 'Regular';
+}
